@@ -35,5 +35,9 @@ public class LoginController {
 		System.out.println("cnt : " + cnt);		
 	}
 
+	/*
+	 * commit test
+	 * 
+	 * */
 	
 }
