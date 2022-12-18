@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.Winner.mapper.PostMapper">
+
+	<select id="selPostList" resultType="CustomMap" parameterType="Map">
+		SELECT POST_SEQ, USR_ID, OPEN_YN, POST_TIT, POST_CONT, POST_AREA1, POST_AREA2
+			, HASH_TAG, PER_YN, TEAM_YN, TEAM_MIN_CNT, TEAM_MAX_CNT
+			, DATE_FORMAT(STR_TO_DATE(END_DT,'%Y%m%d'),'%Y.%m.%d') END_DT, END_YN, INS_DT
+		FROM POSTMST
+		WHERE 1=1
+	</select>
+	
+	<select id="selPostImgList" resultType="CustomMap" parameterType="int">
+		SELECT POST_SEQ, IMG_SEQ, ORI_FILE, SVR_FILE
+		FROM POSTIMG
+		WHERE POST_SEQ = #{postSeq}
+	</select>
+	
+	<select id="postGoodCnt" resultType="int" parameterType="int">
+		SELECT COUNT(*)
+		FROM POSTGOOD
+		WHERE POST_SEQ = #{postSeq}
+	</select>
+	
+</mapper>
