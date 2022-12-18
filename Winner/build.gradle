@@ -16,8 +16,15 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	
+	// https://mvnrepository.com/artifact/commons-collections/commons-collections
+	implementation 'commons-collections:commons-collections:3.2.2'
+	implementation 'org.apache.commons:commons-lang3:3.0'
+	
+	
 	// MyBatis
 	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.2'
+	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+	
 	
 	// MYSQL
 	implementation 'org.mariadb.jdbc:mariadb-java-client:3.0.4'

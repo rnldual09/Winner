@@ -4,6 +4,6 @@ import java.util.HashMap;
 
 public interface LoginService {
 	
-	public int userLogin(HashMap<String, String> map) throws Exception;
+	public int userLogin(HashMap<String, Object> map) throws Exception;
 	
 }

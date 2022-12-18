@@ -17,7 +17,7 @@ public class LoginServiceImpl implements LoginService {
 	private LoginMapper loginMapper;
 	
 	@Override
-	public int userLogin(HashMap<String, String> map) throws Exception {
+	public int userLogin(HashMap<String, Object> map) throws Exception {
 		return loginMapper.userLogin(map);
 
 	}

@@ -7,5 +7,5 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface LoginMapper {
 	
-	int userLogin(HashMap<String, String> map);
+	int userLogin(HashMap<String, Object> map);
 }
