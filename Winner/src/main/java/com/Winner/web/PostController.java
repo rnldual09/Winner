@@ -19,8 +19,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -47,9 +47,9 @@ public class PostController {
 	 * @Param Map<String,Object> commandMap
 	 * @throws Exception, SQLException, IOException
 	 * */
-	@RequestMapping(value = "/post/postList.do", method = RequestMethod.GET)
+	@PostMapping(value = "/post/postList.do")
 	@ResponseBody
-	public List<CustomMap> postList(HttpServletRequest request, HttpServletResponse response, @RequestParam Map<String,Object> commandMap) throws Exception, SQLException, IOException {
+	public List<CustomMap> postList(@RequestParam Map<String,Object> commandMap) throws Exception, SQLException, IOException {
 		List<CustomMap> selPostList = postService.selPostList(commandMap);
 		
 		System.out.println(selPostList);
