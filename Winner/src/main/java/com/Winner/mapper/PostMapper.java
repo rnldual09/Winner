@@ -1,6 +1,5 @@
 package com.Winner.mapper;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -12,7 +11,7 @@ import com.Winner.config.CustomMap;
 public interface PostMapper {
 	
 	//게시글 리스트 가져오기
-	List<HashMap<String,Object>> selPostList(Map<String,Object> map);
+	List<CustomMap> selPostList(Map<String,Object> map);
 	
 	//해당 게시글 이미지 리스트 가져오기
 	List<CustomMap> selPostImgList(int postSeq);

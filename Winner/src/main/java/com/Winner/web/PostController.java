@@ -50,8 +50,8 @@ public class PostController {
 	 * */
 	@PostMapping(value = "/post/postList.do")
 	@ResponseBody
-	public List<HashMap<String,Object>> postList(@RequestParam Map<String,Object> commandMap) throws Exception, SQLException, IOException {
-		List<HashMap<String,Object>> selPostList = postService.selPostList(commandMap);
+	public List<CustomMap> postList(@RequestParam Map<String,Object> commandMap) throws Exception, SQLException, IOException {
+		List<CustomMap> selPostList = postService.selPostList(commandMap);
 		
 		return selPostList;
 	}

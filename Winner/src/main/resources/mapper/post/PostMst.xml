@@ -3,38 +3,13 @@
 
 <mapper namespace="com.Winner.mapper.PostMapper">
 	
-	<!-- 이미지 BLOB 사용하기 위해 반드시 필요함 -->
-	<resultMap id="postList" type="HashMap">
-		<result property="postSeq" column="POST_SEQ" />
-		<result property="usrId" column="USR_ID" />
-		<result property="openYn" column="OPEN_YN" />
-		<result property="postTit" column="POST_TIT" />
-		<result property="postCont" column="POST_CONT" />
-		<result property="postArea1" column="POST_AREA1" />
-		<result property="postArea2" column="POST_AREA2" />
-		<result property="hashTag" column="HASH_TAG" />
-		<result property="perYn" column="PER_YN" />
-		<result property="teamYn" column="TEAM_YN" />
-		<result property="teamMinCnt" column="TEAM_MIN_CNT" />
-		<result property="teamMaxCnt" column="TEAM_MAX_CNT" />
-		<result property="endDt" column="END_DT" />
-		<result property="endYn" column="END_YN" />
-		<result property="goodYn" column="GOOD_YN" />
-		<result property="profileExt" column="PROFILE_EXT" />
-		<result property="profile" column="PROFILE" jdbcType="BLOB"
-			javaType="_byte[]" />
-	</resultMap>
-	
-	<select id="selPostList" resultMap="postList" parameterType="Map">
-		SELECT m.POST_SEQ, m.USR_ID, m.OPEN_YN, m.POST_TIT, m.POST_CONT, m.POST_AREA1, m.POST_AREA2
-			, m.HASH_TAG, m.PER_YN, m.TEAM_YN, m.TEAM_MIN_CNT, m.TEAM_MAX_CNT
-			, DATE_FORMAT(STR_TO_DATE(m.END_DT,'%Y%m%d'),'%Y.%m.%d') END_DT, m.END_YN
+	<select id="selPostList" resultType="CustomMap" parameterType="Map">
+		SELECT POST_SEQ, USR_ID, OPEN_YN, POST_TIT, POST_CONT, POST_AREA1, POST_AREA2
+			, HASH_TAG, PER_YN, TEAM_YN, TEAM_MIN_CNT, TEAM_MAX_CNT
+			, DATE_FORMAT(STR_TO_DATE(END_DT,'%Y%m%d'),'%Y.%%d') END_DT, END_YN
 			, (SELECT CASE COUNT(*) WHEN 0 THEN 'N' ELSE 'Y' END FROM POSTGOOD s WHERE s.USR_ID = #{sessionId}) GOOD_YN
-			, u.PROFILE, u.PROFILE_EXT
-		FROM POSTMST m
-			LEFT OUTER JOIN USRMST u
-				ON(m.USR_ID = u.USR_ID)
-		WHERE m.END_YN = 'N'
+		FROM POSTMST
+		WHERE END_YN = 'N'
 	</select>
 	
 	<select id="selPostImgList" resultType="CustomMap" parameterType="int">

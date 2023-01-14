@@ -22,12 +22,12 @@ public class PostServiceImpl implements PostService {
 	
 	
 	@Override
-	public List<HashMap<String,Object>> selPostList(Map<String,Object> map) {
-		List<HashMap<String,Object>> retPostList = new ArrayList<HashMap<String,Object>>(); //반환할 리스트 객체
+	public List<CustomMap> selPostList(Map<String,Object> map) {
+		List<CustomMap> retPostList = new ArrayList<CustomMap>(); //반환할 리스트 객체
 		
-		List<HashMap<String,Object>> selPostList = postMapper.selPostList(map);
+		List<CustomMap> selPostList = postMapper.selPostList(map);
 		
-		for(HashMap<String,Object> postMap : selPostList) {
+		for(CustomMap postMap : selPostList) {
 			int postSeq = Integer.parseInt(postMap.get("postSeq").toString());
 			List<CustomMap> selPostImgList = postMapper.selPostImgList(postSeq);
 			int goodCnt = postMapper.postGoodCnt(postSeq);
