@@ -8,7 +8,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -20,7 +19,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -48,7 +47,7 @@ public class PostController {
 	 * @Param Map<String,Object> commandMap
 	 * @throws Exception, SQLException, IOException
 	 * */
-	@PostMapping(value = "/post/postList.do")
+	@GetMapping(value = "/post/postList.do")
 	@ResponseBody
 	public List<CustomMap> postList(@RequestParam Map<String,Object> commandMap) throws Exception, SQLException, IOException {
 		List<CustomMap> selPostList = postService.selPostList(commandMap);
