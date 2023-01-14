@@ -34,10 +34,14 @@ public class CommonController {
 	 * */
 	@PostMapping(value = "/common/usrProfile.do")
 	@ResponseBody
-	public HashMap<String,Object> usrProfile(@RequestParam Map<String,Object> commandMap) throws Exception, SQLException, IOException {
+	public byte[] usrProfile(@RequestParam Map<String,Object> commandMap) throws Exception, SQLException, IOException {
 		HashMap<String,Object> usrProfile = commonService.usrProfile(commandMap);
+		byte[] usrProfileByte = null;
+		if(usrProfile.containsKey("profile") && usrProfile.get("profile") != null) {
+			usrProfileByte = (byte[]) usrProfile.get("profile");
+		}
 		
-		return usrProfile;
+		return usrProfileByte;
 	}
 	
 }
