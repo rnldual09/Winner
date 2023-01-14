@@ -1,6 +1,7 @@
 package com.Winner.service.Impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -21,12 +22,12 @@ public class PostServiceImpl implements PostService {
 	
 	
 	@Override
-	public List<CustomMap> selPostList(Map<String,Object> map) {
-		List<CustomMap> retPostList = new ArrayList<CustomMap>(); //반환할 리스트 객체
+	public List<HashMap<String,Object>> selPostList(Map<String,Object> map) {
+		List<HashMap<String,Object>> retPostList = new ArrayList<HashMap<String,Object>>(); //반환할 리스트 객체
 		
-		List<CustomMap> selPostList = postMapper.selPostList(map);
+		List<HashMap<String,Object>> selPostList = postMapper.selPostList(map);
 		
-		for(CustomMap postMap : selPostList) {
+		for(HashMap<String,Object> postMap : selPostList) {
 			int postSeq = Integer.parseInt(postMap.get("postSeq").toString());
 			List<CustomMap> selPostImgList = postMapper.selPostImgList(postSeq);
 			int goodCnt = postMapper.postGoodCnt(postSeq);
