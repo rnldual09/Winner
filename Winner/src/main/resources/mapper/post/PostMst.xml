@@ -20,7 +20,7 @@
 		<result property="endDt" column="END_DT" />
 		<result property="endYn" column="END_YN" />
 		<result property="goodYn" column="GOOD_YN" />
-		<result property="frofileExt" column="FROFILE_EXT" />
+		<result property="profileExt" column="PROFILE_EXT" />
 		<result property="profile" column="PROFILE" jdbcType="BLOB"
 			javaType="_byte[]" />
 	</resultMap>
@@ -30,7 +30,7 @@
 			, m.HASH_TAG, m.PER_YN, m.TEAM_YN, m.TEAM_MIN_CNT, m.TEAM_MAX_CNT
 			, DATE_FORMAT(STR_TO_DATE(m.END_DT,'%Y%m%d'),'%Y.%m.%d') END_DT, m.END_YN
 			, (SELECT CASE COUNT(*) WHEN 0 THEN 'N' ELSE 'Y' END FROM POSTGOOD s WHERE s.USR_ID = #{sessionId}) GOOD_YN
-			, u.PROFILE, u.FROFILE_EXT
+			, u.PROFILE, u.PROFILE_EXT
 		FROM POSTMST m
 			LEFT OUTER JOIN USRMST u
 				ON(m.USR_ID = u.USR_ID)
