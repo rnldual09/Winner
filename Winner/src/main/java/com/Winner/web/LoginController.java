@@ -12,19 +12,27 @@ import java.util.Random;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.Base64Utils;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.Winner.LoginVO;
 import com.Winner.service.LoginService;
+import com.Winner.utils.Sha256Util;
 
 
 
 @Controller("loginController")
 public class LoginController {
+	
+	private final Logger logger = LoggerFactory.getLogger(CommonController.class.getName());
 	
 	@Autowired
 	private LoginService loginService;
@@ -36,16 +44,37 @@ public class LoginController {
 	 * 
 	 * */
 	@GetMapping(value = "/login.do")
-	public  void login()  throws Exception {
+	public  void login(@ModelAttribute("loginVO") LoginVO loginVO,@RequestParam Map<String, Object> commandMap, HttpServletRequest request) throws Exception {
+		LoginVO resultVO = loginService.userLogin(loginVO);
 		
+		String ip = request.getHeader("X-Forwarded-For");
+		logger.info("> X-FORWARDED-FOR : " + ip);
+
+	    if (ip == null) {
+	        ip = request.getHeader("Proxy-Client-IP");
+	        logger.info("> Proxy-Client-IP : " + ip);
+	    }
+	    if (ip == null) {
+	        ip = request.getHeader("WL-Proxy-Client-IP");
+	        logger.info(">  WL-Proxy-Client-IP : " + ip);
+	    }
+	    if (ip == null) {
+	        ip = request.getHeader("HTTP_CLIENT_IP");
+	        logger.info("> HTTP_CLIENT_IP : " + ip);
+	    }
+	    if (ip == null) {
+	        ip = request.getHeader("HTTP_X_FORWARDED_FOR");
+	        logger.info("> HTTP_X_FORWARDED_FOR : " + ip);
+	    }
+	    if (ip == null) {
+	        ip = request.getRemoteAddr();
+	        logger.info("> getRemoteAddr : "+ip);
+	    }
+	    
+	    resultVO.setIp(ip);
+	    
 		HashMap<String, Object> map = new HashMap<>();
 		
-		map.put("id", "rnldual09");
-		map.put("password", "12345");
-		
-		int cnt = loginService.userLogin(map);
-		
-		System.out.println("cnt : " + cnt);		
 	}
 	
 	@RequestMapping(value = "/common/testPyj.do", method = RequestMethod.GET) 

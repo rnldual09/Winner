@@ -1,9 +1,9 @@
 package com.Winner.service;
 
-import java.util.HashMap;
+import com.Winner.LoginVO;
 
 public interface LoginService {
 	
-	public int userLogin(HashMap<String, Object> map) throws Exception;
+	public LoginVO userLogin(LoginVO loginVO) throws Exception;
 	
 }

@@ -2,12 +2,27 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.Winner.mapper.LoginMapper">
-
-	<select id="userLogin" resultType="int" parameterType="HashMap">
-		SELECT COUNT(*)
-		FROM test
-		WHERE Column1 = #{id}
-		AND Column2 = #{password}
+	
+	<resultMap id="login" type="com.Winner.LoginVO">
+		<result property="usrId" column="USR_ID"/>
+		<result property="usrPw" column="USR_PW"/>
+		<result property="usrNm" column="USR_NM"/>
+		<result property="usrPh" column="USR_PH"/>
+		<result property="birthDt" column="BIRTH_DT"/>		
+		<result property="usrSex" column="USR_SEX"/>		
+		<result property="lockYn" column="LOCK_YN"/>		
+		<result property="usrArea1" column="USR_AREA1"/>		
+		<result property="usrArea2" column="USR_AREA2"/>		
+		<result property="profile" column="PROFILE"/>
+		<result property="lastPwDate" column="LAST_PW_DATE"/>
+	</resultMap>
+	
+	<select id="userLogin" resultMap="login">
+		SELECT USR_ID, USR_PW, USR_NM, USR_PH, MAIL_ID, MAIL_DOMAIN, BIRTH_DT, USR_SEX
+			, USR_AREA1, USR_AREA2, PROFILE, LOCK_YN, LAST_PW_DATE
+		FROM USRMST
+		WHERE USR_ID = #{usrId}
+			AND USR_PW = #{usrPw}
 	</select>
 	
 </mapper>
