@@ -3,15 +3,8 @@
 
 <mapper namespace="com.Winner.mapper.CommonMapper">
 	
-	<!-- 이미지 BLOB 사용하기 위해 반드시 필요함 -->
-	<resultMap id="usrProfileMap" type="HashMap">
-		<result property="profileExt" column="PROFILE_EXT" />
-		<result property="profile" column="PROFILE" jdbcType="BLOB"
-			javaType="_byte[]" />
-	</resultMap>
-	
 	<select id="usrProfile" resultMap="usrProfileMap" parameterType="Map">
-		SELECT PROFILE, PROFILE_EXT
+		SELECT PROFILE
 		FROM USRMST
 		WHERE USR_ID = #{usrId}
 	</select>
