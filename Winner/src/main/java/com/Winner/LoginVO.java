@@ -41,7 +41,7 @@ public class LoginVO implements Serializable{
 	/** 프로필 */
 	private String profile;
 	/** 마지막 비번 변경일 */
-	private String lastPwDate;
+	private String chgPwYn;
 	
 	public String getUsrId() {
 		return usrId;
@@ -131,12 +131,12 @@ public class LoginVO implements Serializable{
 		this.profile = profile;
 	}
 
-	public String getLastPwDate() {
-		return lastPwDate;
+	public String getChgPwYn() {
+		return chgPwYn;
 	}
 
-	public void setLastPwDate(String lastPwDate) {
-		this.lastPwDate = lastPwDate;
+	public void setChgPwYn(String chgPwYn) {
+		this.chgPwYn = chgPwYn;
 	}
 
 	public static long getSerialversionuid() {

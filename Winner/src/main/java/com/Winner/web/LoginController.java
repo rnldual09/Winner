@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -19,12 +20,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.util.Base64Utils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.Winner.LoginVO;
 import com.Winner.service.LoginService;
+import com.Winner.utils.CheckParamUtil;
 import com.Winner.utils.Sha256Util;
 
 
@@ -43,38 +48,71 @@ public class LoginController {
 	 * 로그인 로직 처리
 	 * 
 	 * */
-	@GetMapping(value = "/login.do")
-	public  void login(@ModelAttribute("loginVO") LoginVO loginVO,@RequestParam Map<String, Object> commandMap, HttpServletRequest request) throws Exception {
+	@PostMapping(value = "/login.do")
+	@ResponseBody
+	public HashMap<String, Object> login(@RequestBody LoginVO loginVO, HttpServletRequest request) throws Exception {
+	
+		HashMap<String, Object> test = new HashMap<String, Object>();
+		
+		test.put("usrId", loginVO.getUsrId());
+		test.put("usrPw", loginVO.getUsrPw());
+		
+		boolean testt = CheckParamUtil.CheckParam(test, "login");
+	
+		System.out.println("testt : " + testt);
+		
 		LoginVO resultVO = loginService.userLogin(loginVO);
 		
-		String ip = request.getHeader("X-Forwarded-For");
-		logger.info("> X-FORWARDED-FOR : " + ip);
-
-	    if (ip == null) {
-	        ip = request.getHeader("Proxy-Client-IP");
-	        logger.info("> Proxy-Client-IP : " + ip);
-	    }
-	    if (ip == null) {
-	        ip = request.getHeader("WL-Proxy-Client-IP");
-	        logger.info(">  WL-Proxy-Client-IP : " + ip);
-	    }
-	    if (ip == null) {
-	        ip = request.getHeader("HTTP_CLIENT_IP");
-	        logger.info("> HTTP_CLIENT_IP : " + ip);
-	    }
-	    if (ip == null) {
-	        ip = request.getHeader("HTTP_X_FORWARDED_FOR");
-	        logger.info("> HTTP_X_FORWARDED_FOR : " + ip);
-	    }
-	    if (ip == null) {
-	        ip = request.getRemoteAddr();
-	        logger.info("> getRemoteAddr : "+ip);
-	    }
-	    
-	    resultVO.setIp(ip);
-	    
-		HashMap<String, Object> map = new HashMap<>();
+		HashMap<String, Object> map = new HashMap<String, Object>();
 		
+		// 유저정보 미존재
+		if(resultVO == null) {			
+			map.put("status", "undefinedUser");						
+		}
+		// 비밀번호 변경일 3개월 지난 유저
+		else if("Y".equals(resultVO.getChgPwYn())) {
+			map.put("status", "changePw");			
+		}
+		// 잠금된 유
+		else if("Y".equals(resultVO.getLockYn())) {
+			map.put("status", "lockUser");			
+		}
+		else {
+			
+			// jwt token 구현하기
+			String token = "ddd"; 
+			
+			String ip = request.getHeader("X-Forwarded-For");
+			logger.info("> X-FORWARDED-FOR : " + ip);
+
+		    if (ip == null) {
+		        ip = request.getHeader("Proxy-Client-IP");
+		        logger.info("> Proxy-Client-IP : " + ip);
+		    }
+		    if (ip == null) {
+		        ip = request.getHeader("WL-Proxy-Client-IP");
+		        logger.info(">  WL-Proxy-Client-IP : " + ip);
+		    }
+		    if (ip == null) {
+		        ip = request.getHeader("HTTP_CLIENT_IP");
+		        logger.info("> HTTP_CLIENT_IP : " + ip);
+		    }
+		    if (ip == null) {
+		        ip = request.getHeader("HTTP_X_FORWARDED_FOR");
+		        logger.info("> HTTP_X_FORWARDED_FOR : " + ip);
+		    }
+		    if (ip == null) {
+		        ip = request.getRemoteAddr();
+		        logger.info("> getRemoteAddr : "+ip);
+		    }
+		    
+		    resultVO.setIp(ip);
+		
+			map.put("usrInfo", resultVO);
+			map.put("token", token);
+		}
+				
+		return map;
 	}
 	
 	@RequestMapping(value = "/common/testPyj.do", method = RequestMethod.GET) 
@@ -184,5 +222,13 @@ public class LoginController {
 	 * 여섯번째 커밋
 	 * 
 	 * */
-	
+
 }
+
+
+
+	
+	
+	
+
+

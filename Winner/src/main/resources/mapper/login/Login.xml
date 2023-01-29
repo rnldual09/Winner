@@ -14,12 +14,13 @@
 		<result property="usrArea1" column="USR_AREA1"/>		
 		<result property="usrArea2" column="USR_AREA2"/>		
 		<result property="profile" column="PROFILE"/>
-		<result property="lastPwDate" column="LAST_PW_DATE"/>
+		<result property="chgPwYn" column="CHG_PW_YN"/>
 	</resultMap>
 	
 	<select id="userLogin" resultMap="login">
 		SELECT USR_ID, USR_PW, USR_NM, USR_PH, MAIL_ID, MAIL_DOMAIN, BIRTH_DT, USR_SEX
-			, USR_AREA1, USR_AREA2, PROFILE, LOCK_YN, LAST_PW_DATE
+			 , USR_AREA1, USR_AREA2, PROFILE, LOCK_YN
+			 , CASE WHEN DATE_ADD(LAST_PW_DATE, INTERVAL 3 MONTH) <![CDATA[ < ]]> SYSDATE() THEN 'Y' ELSE 'N' END AS CHG_PW_YN
 		FROM USRMST
 		WHERE USR_ID = #{usrId}
 			AND USR_PW = #{usrPw}
