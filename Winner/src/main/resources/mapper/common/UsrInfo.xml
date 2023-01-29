@@ -3,10 +3,4 @@
 
 <mapper namespace="com.Winner.mapper.CommonMapper">
 	
-	<select id="usrProfile" resultMap="usrProfileMap" parameterType="Map">
-		SELECT PROFILE
-		FROM USRMST
-		WHERE USR_ID = #{usrId}
-	</select>
-	
 </mapper>
