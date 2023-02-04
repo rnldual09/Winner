@@ -51,15 +51,6 @@ public class LoginController {
 	@PostMapping(value = "/login.do")
 	@ResponseBody
 	public HashMap<String, Object> login(@RequestBody LoginVO loginVO, HttpServletRequest request) throws Exception {
-	
-		HashMap<String, Object> test = new HashMap<String, Object>();
-		
-		test.put("usrId", loginVO.getUsrId());
-		test.put("usrPw", loginVO.getUsrPw());
-		
-		boolean testt = CheckParamUtil.CheckParam(test, "login");
-	
-		System.out.println("testt : " + testt);
 		
 		LoginVO resultVO = loginService.userLogin(loginVO);
 		
@@ -108,6 +99,7 @@ public class LoginController {
 		    
 		    resultVO.setIp(ip);
 		
+		    map.put("status", "success");		
 			map.put("usrInfo", resultVO);
 			map.put("token", token);
 		}
