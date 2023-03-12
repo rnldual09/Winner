@@ -50,8 +50,8 @@ public class PostController {
 	 * */
 	@PostMapping(value = "/post/postList.do")
 	@ResponseBody
-	public List<CustomMap> postList(@RequestBody Map<String,Object> commandMap) throws Exception, SQLException, IOException {
-		List<CustomMap> selPostList = postService.selPostList(commandMap);
+	public List<Map<String,Object>> postList(@RequestBody Map<String,Object> commandMap) throws Exception, SQLException, IOException {
+		List<Map<String,Object>> selPostList = postService.selPostList(commandMap);
 		
 		return selPostList;
 	}
@@ -87,6 +87,21 @@ public class PostController {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	/** 
+	 * @Date 2023.03.12
+	 * @author 박윤진
+	 * @deprecated 한 개 게시글 정보 가져오기
+	 * @Param Map<String,Object> commandMap
+	 * @throws Exception, SQLException, IOException
+	 * */
+	@PostMapping(value = "/post/getPostInfo.do")
+	@ResponseBody
+	public Map<String,Object> getPostInfo(@RequestBody Map<String,Object> commandMap) throws Exception, SQLException, IOException {
+		Map<String,Object> postInfo = postService.getPostInfo(commandMap);
+		
+		return postInfo;
 	}
 
 }

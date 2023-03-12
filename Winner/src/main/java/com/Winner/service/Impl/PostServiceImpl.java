@@ -22,14 +22,14 @@ public class PostServiceImpl implements PostService {
 	
 	
 	@Override
-	public List<CustomMap> selPostList(Map<String,Object> map) {
-		List<CustomMap> retPostList = new ArrayList<CustomMap>(); //반환할 리스트 객체
+	public List<Map<String,Object>> selPostList(Map<String,Object> map) {
+		List<Map<String,Object>> retPostList = new ArrayList<>(); //반환할 리스트 객체
 		
-		List<CustomMap> selPostList = postMapper.selPostList(map);
+		List<Map<String,Object>> selPostList = postMapper.selPostList(map);
 		
-		for(CustomMap postMap : selPostList) {
+		for(Map<String,Object> postMap : selPostList) {
 			int postSeq = Integer.parseInt(postMap.get("postSeq").toString());
-			List<CustomMap> selPostImgList = postMapper.selPostImgList(postSeq);
+			List<?> selPostImgList = postMapper.selPostImgList(postSeq);
 			int goodCnt = postMapper.postGoodCnt(postSeq);
 			postMap.put("imglist", selPostImgList);
 			postMap.put("goodcnt", goodCnt);
@@ -37,6 +37,11 @@ public class PostServiceImpl implements PostService {
 		}
 		
 		return retPostList;
+	}
+	
+	@Override
+	public Map<String,Object> getPostInfo(Map<String,Object> map) {
+		return postMapper.getPostInfo(map);
 	}
 	
 }

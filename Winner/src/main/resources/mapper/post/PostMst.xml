@@ -24,4 +24,10 @@
 		WHERE POST_SEQ = #{postSeq}
 	</select>
 	
+	<select id="getPostInfo" resultType="Map" parameterType="Map">
+		SELECT POST_SEQ, PER_YN, TEAM_YN, TEAM_MIN_CNT, TEAM_MAX_CNT
+		FROM POSTMST
+		WHERE POST_SEQ = #{postSeq}
+	</select>
+	
 </mapper>
