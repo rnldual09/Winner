@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.Winner.mapper.CommonMapper">
+	
+	<resultMap id="cod" type="hashMap">
+		<result property="codId"   column="COD_ID"/>
+		<result property="codCd"   column="COD_CD"/>
+		<result property="codNm"   column="COD_NM"/>
+		<result property="codVal1" column="COD_VAL1"/>
+		<result property="codVal2" column="COD_VAL2"/>		
+		<result property="codVal3" column="COD_VAL3"/>		
+		<result property="codVal4" column="COD_VAL4"/>		
+	</resultMap>
+	
+	<select id="getCodeList" resultMap="cod">
+		SELECT COD_ID, COD_CD, COD_NM, COD_VAL1, COD_VAL2, COD_VAL3, COD_VAL4
+		FROM CODDTL
+		WHERE USE_YN = "Y"
+		AND COD_ID = #{codId}
+		AND IFNULL(COD_VAL1, '') = #{codVal1}
+		<if test="codCd != null and codCd != ''">
+			AND COD_CD = #{codCd};
+		</if>
+	</select>
+		
+</mapper>
