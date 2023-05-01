@@ -1,11 +1,10 @@
 package com.Winner.service;
 
 
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public interface CommonService {
-	
-	public HashMap<String,Object> usrProfile(Map<String,Object> map) throws Exception;
-	
+
+	public List<Map<String, Object>> getCodeList(Map<String, Object> commandMap) throws Exception;
 }

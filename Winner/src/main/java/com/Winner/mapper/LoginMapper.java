@@ -8,4 +8,8 @@ import com.Winner.LoginVO;
 public interface LoginMapper {
 	
 	LoginVO userLogin(LoginVO loginVO);
+
+	int checkDupId(LoginVO loginVO);
+
+	int insertMember(LoginVO loginVO);
 }

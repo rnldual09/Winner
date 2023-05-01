@@ -28,4 +28,14 @@ public class LoginServiceImpl implements LoginService {
 		return loginMapper.userLogin(loginVO);
 
 	}
+
+	@Override
+	public int checkDupId(LoginVO loginVO) {
+		return loginMapper.checkDupId(loginVO);
+	}
+
+	@Override
+	public int insertMember(LoginVO loginVO) {
+		return loginMapper.insertMember(loginVO);
+	}
 }

@@ -8,6 +8,7 @@
 			, HASH_TAG, PER_YN, TEAM_YN, TEAM_MIN_CNT, TEAM_MAX_CNT
 			, DATE_FORMAT(STR_TO_DATE(END_DT,'%Y%m%d'),'%Y.%m.%d') END_DT, END_YN
 			, (SELECT CASE COUNT(*) WHEN 0 THEN 'N' ELSE 'Y' END FROM POSTGOOD s WHERE s.USR_ID = #{sessionId}) GOOD_YN
+			, (SELECT PROFILE FROM USRMST UM WHERE UM.USR_ID = PM.USR_ID) AS PROFILE
 		FROM POSTMST
 		WHERE END_YN = 'N'
 	</select>
@@ -25,9 +26,130 @@
 	</select>
 	
 	<select id="getPostInfo" resultType="CustomMap" parameterType="Map">
-		SELECT POST_SEQ, PER_YN, TEAM_YN, TEAM_MIN_CNT, TEAM_MAX_CNT
+		SELECT POST_SEQ
+			 , USR_ID
+			 , OPEN_YN
+			 , POST_TIT
+			 , POST_CONT
+			 , POST_AREA1
+			 , POST_AREA2
+			 , HASH_TAG
+			 , PER_YN
+			 , TEAM_YN
+			 , TEAM_MIN_CNT
+			 , TEAM_MAX_CNT 
+			 , INS_DT
+			 , END_DT
+			 , END_YN
 		FROM POSTMST
 		WHERE POST_SEQ = #{postSeq}
 	</select>
+	
+	<select id="getPostSeq" resultType="String">
+		SELECT MAX(POST_SEQ) + 1
+		FROM POSTMST
+	</select>
+	
+	<insert id="insertPostMst" parameterType="Map">
+		INSERT INTO POSTMST (
+			POST_SEQ,
+			USR_ID,
+			OPEN_YN,
+			POST_TIT,
+			POST_CONT,
+			POST_AREA1,
+			POST_AREA2,
+			HASH_TAG,
+			PER_YN,
+			TEAM_YN,
+			TEAM_MIN_CNT,
+			TEAM_MAX_CNT,
+			INS_DT,
+			UPD_DT,
+			END_DT,
+			END_YN
+		) VALUES (
+			#{postSeq},
+			#{usrId},
+			#{openYn},
+			#{postTit},
+			#{postCont},
+			#{postArea1},
+			#{postArea2},
+			#{hashTag},
+			#{perYn},
+			#{teamYn},
+			#{teamMinCnt},
+			#{teamMaxCnt},
+			NOW(),
+			NOW(),
+			#{endDt},
+			'N'
+		)
+	</insert>
+	
+	<insert id="insertPostImg" parameterType="Map">
+		INSERT INTO POSTIMG (
+			POST_SEQ,
+			IMG_SEQ,
+			ORI_FILE,
+			SVR_FILE
+		) VALUES (
+			#{postSeq},
+			#{imgSeq},
+			#{oriFile},
+			#{svrFile}
+		)
+	</insert>
+	
+	<insert id="insertGrdMst" parameterType="Map">
+		INSERT INTO GRDMST (
+			POST_SEQ,
+			GRD_SEQ,
+			GRD_NM,
+			GRD_CNT
+		) VALUES (
+			#{postSeq},
+			#{grdSeq},
+			#{grdNm},
+			#{grdCnt}
+		)
+	</insert>
+	
+	<select id="selGrdList" resultType="CustomMap" parameterType="Map">
+		SELECT POST_SEQ
+			 , GRD_SEQ 
+			 , GRD_NM 
+			 , GRD_CNT
+		FROM GRDMST
+		WHERE POST_SEQ = #{postSeq}
+	</select>
+	
+	<update id="updatePostMst" parameterType="Map">
+		UPDATE POSTMST SET OPEN_YN = #{openYn}
+					 , POST_TIT = #{postTit}
+					 , POST_CONT = #{postCont}
+					 , POST_AREA1  = #{postArea1}
+					 , POST_AREA2 = #{postArea2}
+					 , HASH_TAG = #{hashTag}
+					 , PER_YN = #{perYn}
+					 , TEAM_YN = #{teamYn}
+					 , TEAM_MIN_CNT = #{teamMinCnt}
+					 , TEAM_MAX_CNT = #{teamMaxCnt}
+					 , END_DT = #{endDt}
+					 , UPD_DT = NOW()
+		WHERE POST_SEQ = #{postSeq}
+	</update>
+	
+	<delete id="deleteGrdMst" parameterType="Map">
+		DELETE FROM GRDMST
+		WHERE POST_SEQ = #{postSeq}
+	</delete>
+	
+	<delete id="deletePostImg" parameterType="Map">
+		DELETE FROM POSTIMG
+		WHERE POST_SEQ = #{postSeq}
+	</delete>
+	
 	
 </mapper>

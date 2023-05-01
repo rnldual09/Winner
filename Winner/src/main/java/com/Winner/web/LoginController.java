@@ -200,21 +200,51 @@ public class LoginController {
 		
 	}
 
-	/*
-	 * commit test
-	 * 
-	 * 두번째 커밋 테스트
-	 * 
-	 * 세번째 커밋 테스트
-	 * 
-	 * 네번째 커밋 테스트
-	 * 
-	 * 다섯번째 커
-	 * 
-	 * 여섯번째 커밋
-	 * 
+	/** 
+	 * @Date 2023.04.29
+	 * @author 금길영
+	 * @deprecated 아이디중복체크
+	 * @Param LoginVO loginVO
+	 * @throws Exception, SQLException, IOException
 	 * */
+	@PostMapping(value = "/checkDupId.do")
+	@ResponseBody
+	public HashMap<String, Object> checkDupId(@RequestBody LoginVO loginVO, HttpServletRequest request) throws Exception {
+		
+		int cnt = loginService.checkDupId(loginVO);
+		
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		
+		String result = cnt == 0 ? "available" : "unavailable";
+		map.put("result", result);
+		
+		return map;
+	}
 
+	/** 
+	 * @Date 2023.04.29
+	 * @author 금길영
+	 * @deprecated 회원가입
+	 * @Param LoginVO loginVO
+	 * @throws Exception, SQLException, IOException
+	 * */
+	@PostMapping(value = "/insertMember.do")
+	@ResponseBody
+	public HashMap<String, Object> insertMember(@RequestBody LoginVO loginVO, HttpServletRequest request) throws Exception {
+		
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		String result = "fail";
+
+		// 중복된 아이디인지 한번 더 검사		
+		int cnt = loginService.checkDupId(loginVO);
+		
+		if(cnt == 0) {			
+			result = loginService.insertMember(loginVO) == 1 ? "success" : "fail";			
+		} 
+		
+		map.put("result", result);
+		return map;
+	}
 }
 
 

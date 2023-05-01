@@ -8,6 +8,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -99,9 +100,47 @@ public class PostController {
 	@PostMapping(value = "/post/getPostInfo.do")
 	@ResponseBody
 	public Map<String,Object> getPostInfo(@RequestBody Map<String,Object> commandMap) throws Exception, SQLException, IOException {
-		Map<String,Object> postInfo = postService.getPostInfo(commandMap);
-		
-		return postInfo;
+		Map<String,Object> postInfoMap = postService.getPostInfo(commandMap);		
+		return postInfoMap;
 	}
 
+	/** 
+	 * @Date 2023.04.27
+	 * @author 금길영
+	 * @deprecated 게시글 등록하기
+	 * @Param Map<String,Object> commandMap
+	 * @throws Exception, SQLException, IOException
+	 * */
+	@PostMapping(value = "/post/insPostMst.do")
+	@ResponseBody
+	public Map<String,Object> insPostMst(@RequestBody Map<String,Object> commandMap) throws Exception, SQLException, IOException {
+		
+		Map<String,Object> resultMap = new HashMap<>();
+						
+		// 게시글 번호 채번
+		String postSeq = postService.getPostSeq();
+		commandMap.put("postSeq", postSeq);
+		
+		postService.insertPostMst(commandMap);
+		
+		return resultMap;
+	}
+
+	/** 
+	 * @Date 2023.04.30
+	 * @author 금길영
+	 * @deprecated 내 게시글 수정하기
+	 * @Param Map<String,Object> commandMap
+	 * @throws Exception, SQLException, IOException
+	 * */
+	@PostMapping(value = "/post/uptPostMst.do")
+	@ResponseBody
+	public Map<String,Object> uptPostMst(@RequestBody Map<String,Object> commandMap) throws Exception, SQLException, IOException {
+		
+		Map<String,Object> resultMap = new HashMap<>();
+		
+		postService.updatePostMst(commandMap);		
+		
+		return resultMap;
+	}
 }

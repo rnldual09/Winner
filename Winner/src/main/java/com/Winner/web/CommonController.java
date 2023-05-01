@@ -7,6 +7,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.SQLException;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,8 +19,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.Winner.service.CommonService;
 
@@ -69,6 +74,18 @@ public class CommonController {
 		}
 	}
 	
-	
+	/** 
+	 * @Date 2023.04.23
+	 * @author 금길영
+	 * @deprecated 코드테이블 리스트
+	 * @Param Map<String,Object> commandMap
+	 * @throws Exception, SQLException, IOException
+	 * */
+	@PostMapping(value = "/common/getCodeList.do")
+	@ResponseBody
+	public List<Map<String,Object>> getCodeList(@RequestBody Map<String,Object> commandMap) throws Exception, SQLException, IOException {
+		List<Map<String,Object>> getCodeList = commonService.getCodeList(commandMap);
+		return getCodeList;
+	}
 	
 }

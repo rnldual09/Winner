@@ -26,4 +26,44 @@
 			AND USR_PW = #{usrPw}
 	</select>
 	
+	<select id="checkDupId" resultType="int">
+		SELECT COUNT(*)
+		FROM USRMST
+		WHERE USR_ID = #{usrId}
+	</select>
+	
+	<insert id="insertMember">
+		INSERT INTO USRMST (
+			USR_ID,
+			USR_PW,
+			USR_NM ,
+			USR_PH ,
+			MAIL_ID ,
+			MAIL_DOMAIN ,
+			BIRTH_DT ,
+			USR_SEX ,
+			USR_AREA1 ,
+			USR_AREA2 ,
+			PROFILE ,
+			LOCK_YN ,
+			LAST_PW_DATE ,
+			INS_DT
+		) VALUES (
+			#{usrId},
+			#{usrPw},
+			#{usrNm},
+			#{usrPh},
+			#{mailId},
+			#{mailDomain},
+			#{birthDt},
+			#{usrSex},
+			#{usrArea1},
+			#{usrArea2},
+			#{profile},
+			'N',
+			NOW(),
+			NOW()
+		)
+	</insert>	
+	
 </mapper>

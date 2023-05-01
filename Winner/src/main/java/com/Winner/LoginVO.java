@@ -42,7 +42,11 @@ public class LoginVO implements Serializable{
 	private String profile;
 	/** 마지막 비번 변경일 */
 	private String chgPwYn;
-	
+	/** 매알아이디 */
+	private String mailId;
+	/** 메일도메인 */
+	private String mailDomain;
+
 	public String getUsrId() {
 		return usrId;
 	}
@@ -142,7 +146,21 @@ public class LoginVO implements Serializable{
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
+	public String getMailId() {
+		return mailId;
+	}
 
+	public void setMailId(String mailId) {
+		this.mailId = mailId;
+	}
+
+	public String getMailDomain() {
+		return mailDomain;
+	}
+
+	public void setMailDomain(String mailDomain) {
+		this.mailDomain = mailDomain;
+	}
 
 	
 }
