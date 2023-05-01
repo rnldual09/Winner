@@ -13,7 +13,7 @@
 		<result property="codVal4" column="COD_VAL4"/>		
 	</resultMap>
 	
-	<select id="getCodeList" resultMap="cod">
+	<select id="getCodeList" resultType="CustomMap">
 		SELECT COD_ID, COD_CD, COD_NM, COD_VAL1, COD_VAL2, COD_VAL3, COD_VAL4
 		FROM CODDTL
 		WHERE USE_YN = "Y"
