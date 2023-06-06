@@ -30,12 +30,30 @@ public class LoginServiceImpl implements LoginService {
 	}
 
 	@Override
-	public int checkDupId(LoginVO loginVO) {
+	public int checkDupId(LoginVO loginVO) throws Exception {
 		return loginMapper.checkDupId(loginVO);
 	}
 
 	@Override
 	public int insertMember(LoginVO loginVO) {
 		return loginMapper.insertMember(loginVO);
+	}
+
+	@Override
+	public String findMyId(LoginVO loginVO) throws Exception {
+		return loginMapper.findMyId(loginVO);
+	}
+
+	@Override
+	public int changePassWord(LoginVO loginVO) throws Exception {
+		//암호화로 저장했을 때 주석 풀어주면 됌
+		/*
+		String encryPassword = Sha256Util.encrypt(loginVO.getUsrId()+loginVO.getUsrPw()); //sha256 단방향 암호화
+		
+		String Base64Pw = Base64Utils.encodeToString(encryPassword.getBytes()); //base64 인코딩
+		
+		loginVO.setUsrPw(Base64Pw);
+		*/
+		return loginMapper.changePassWord(loginVO);
 	}
 }

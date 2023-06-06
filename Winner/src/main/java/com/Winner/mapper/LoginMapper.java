@@ -12,4 +12,8 @@ public interface LoginMapper {
 	int checkDupId(LoginVO loginVO);
 
 	int insertMember(LoginVO loginVO);
+
+	String findMyId(LoginVO loginVO);
+
+	int changePassWord(LoginVO loginVO);
 }

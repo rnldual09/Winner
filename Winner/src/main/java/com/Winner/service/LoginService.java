@@ -6,8 +6,12 @@ public interface LoginService {
 	
 	public LoginVO userLogin(LoginVO loginVO) throws Exception;
 
-	public int checkDupId(LoginVO loginVO);
+	public int checkDupId(LoginVO loginVO) throws Exception;
 
-	public int insertMember(LoginVO loginVO);
+	public int insertMember(LoginVO loginVO) throws Exception;
+
+	public String findMyId(LoginVO loginVO) throws Exception;
+
+	public int changePassWord(LoginVO loginVO) throws Exception;
 	
 }

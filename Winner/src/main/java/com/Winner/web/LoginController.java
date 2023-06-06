@@ -221,14 +221,12 @@ public class LoginController {
 	@ResponseBody
 	public HashMap<String, Object> checkDupId(@RequestBody LoginVO loginVO, HttpServletRequest request) throws Exception {
 		
-		int cnt = loginService.checkDupId(loginVO);
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		
-		HashMap<String, Object> map = new HashMap<String, Object>();
+		int result = loginService.checkDupId(loginVO);		
+		resultMap.put("result", result);
 		
-		String result = cnt == 0 ? "available" : "unavailable";
-		map.put("result", result);
-		
-		return map;
+		return resultMap;
 	}
 
 	/** 
@@ -254,6 +252,49 @@ public class LoginController {
 		
 		map.put("result", result);
 		return map;
+	}
+	
+	/** 
+	 * @Date 2023.06.06
+	 * @author 금길영
+	 * @deprecated 유저아이디찾기
+	 * @Param LoginVO loginVO
+	 * @throws Exception, SQLException, IOException
+	 * */
+	@PostMapping(value = "/findMyId.do")
+	@ResponseBody
+	public HashMap<String, Object> findMyId(@RequestBody LoginVO loginVO, HttpServletRequest request) throws Exception {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		String usrId = loginService.findMyId(loginVO);
+		
+		if(usrId == null) {
+			usrId = "";
+		}
+		
+		resultMap.put("usrId", usrId);
+		
+		return resultMap;
+	}
+	
+	/** 
+	 * @Date 2023.06.06
+	 * @author 금길영
+	 * @deprecated 유저아이디찾기
+	 * @Param LoginVO loginVO
+	 * @throws Exception, SQLException, IOException
+	 * */
+	@PostMapping(value = "/changePassword.do")
+	@ResponseBody
+	public HashMap<String, Object> changePassword(@RequestBody LoginVO loginVO, HttpServletRequest request) throws Exception {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		int updateCnt = loginService.changePassWord(loginVO);
+		resultMap.put("updateCnt", updateCnt);
+		
+		return resultMap;
 	}
 }
 

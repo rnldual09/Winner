@@ -29,7 +29,8 @@
 	<select id="checkDupId" resultType="int">
 		SELECT COUNT(*)
 		FROM USRMST
-		WHERE USR_ID = #{usrId}
+		WHERE DEL_YN = 'N'
+		AND USR_ID = #{usrId}
 	</select>
 	
 	<insert id="insertMember">
@@ -65,5 +66,17 @@
 			NOW()
 		)
 	</insert>	
+	
+	<select id="findMyId" resultType="String">
+		SELECT USR_ID
+		FROM USRMST
+		WHERE DEL_YN = 'N'
+		AND USR_PH = #{usrPh}
+	</select>
+	
+	<update id="changePassWord">
+		UPDATE USRMST SET USR_PW = #{usrPw}
+		WHERE USR_ID = #{usrId}
+	</update>
 	
 </mapper>
