@@ -21,13 +21,12 @@
 			 , (SELECT COUNT(*) FROM POSTGOOD PG WHERE PG.POST_SEQ = PM.POST_SEQ) AS GOOD_CNT
 			 , (SELECT CASE WHEN COUNT(*) > 0 THEN 'Y' ELSE 'N' END FROM POSTGOOD PG WHERE PG.USR_ID  = #{sessionId} AND PG.POST_SEQ = PM.POST_SEQ) AS GOOD_YN
 			 , UM.PROFILE
-		FROM USRMST UM
-		RIGHT OUTER JOIN POSTMST PM
-		ON UM.USR_ID = PM.USR_ID		
-		<if test="onlyMate != null and onlyMate == Y">
+		FROM POSTMST PM
+			LEFT OUTER JOIN USRMST UM
+				ON PM.USR_ID = UM.USR_ID		
+		<if test="onlyMate != null and onlyMate eq 'Y'.toString()">
 			INNER JOIN MATELIST ML
-			ON PM.USR_ID = ML.MATE_ID
-			AND ML.USR_ID = #{sessionId}
+				ON PM.USR_ID = ML.MATE_ID AND ML.USR_ID = #{sessionId}
 		</if>
 		WHERE PM.END_YN = 'N'
 		AND PM.OPEN_YN = 'Y'
@@ -36,30 +35,22 @@
 			PM.POST_AREA2 LIKE '%${item}%'
 		</foreach>		
 		AND PM.PER_YN = #{perYn}
-		AND PM.TEAM_YN = #{teamYn}		
-		<if test="usrId != null and usrId != ''">
+		AND PM.TEAM_YN = #{teamYn}
+		AND DATE_FORMAT(PM.END_DT,'%Y%m%d') <![CDATA[<]]> DATE_FORMAT(SYSDATE(),'%Y%m%d')
+		<if test="usrId != null and !usrId eq ''.toString()">
 			AND PM.USR_ID = #{usrId}
 		</if>
-		<if test="teamMinCnt != null and teamMinCnt != ''">
+		<if test="teamMinCnt != null and !teamMinCnt eq ''.toString()">
 			AND PM.TEAM_MIN_CNT = #{teamMinCnt}
 		</if>
-		<if test="teamMaxCnt != null and teamMaxCnt != ''">
+		<if test="teamMaxCnt != null and !teamMaxCnt eq ''.toString()">
 			AND PM.TEAM_MAX_CNT = #{teamMaxCnt}
-		</if>
-		<if test="endDt != null and endDt != ''">
-			AND PM.END_DT = #{endDt}
 		</if>
 	</select>
 	
 	<select id="selPostImgList" resultType="CustomMap" parameterType="int">
 		SELECT POST_SEQ, IMG_SEQ, ORI_FILE, SVR_FILE
 		FROM POSTIMG
-		WHERE POST_SEQ = #{postSeq}
-	</select>
-	
-	<select id="postGoodCnt" resultType="int" parameterType="int">
-		SELECT COUNT(*)
-		FROM POSTGOOD
 		WHERE POST_SEQ = #{postSeq}
 	</select>
 	

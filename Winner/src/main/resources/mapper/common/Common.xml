@@ -3,48 +3,40 @@
 
 <mapper namespace="com.Winner.mapper.CommonMapper">
 	
-	<resultMap id="cod" type="hashMap">
-		<result property="codId"   column="COD_ID"/>
-		<result property="codCd"   column="COD_CD"/>
-		<result property="codNm"   column="COD_NM"/>
-		<result property="codVal1" column="COD_VAL1"/>
-		<result property="codVal2" column="COD_VAL2"/>		
-		<result property="codVal3" column="COD_VAL3"/>		
-		<result property="codVal4" column="COD_VAL4"/>		
-	</resultMap>
-	
 	<select id="getCodeList" resultType="CustomMap">
 		SELECT COD_ID, COD_CD, COD_NM, COD_VAL1, COD_VAL2, COD_VAL3, COD_VAL4
 		FROM CODDTL
-		WHERE USE_YN = "Y"
+		WHERE USE_YN = 'Y'
 		AND COD_ID = #{codId}
 		AND IFNULL(COD_VAL1, '') = #{codVal1}
-		<if test="codCd != null and codCd != ''">
-			AND COD_CD = #{codCd};
+		<if test="codCd != null and !codCd eq ''.toString()">
+			AND COD_CD = #{codCd}
 		</if>
 	</select>
 	
 	<select id="getAreaList" resultType="CustomMap">
-		
-		<if test="codVal1 == ''">
-			SELECT COD_CD
-				 , COD_NM
-				 , (SELECT COUNT(*) FROM POSTMST WHERE POST_AREA1 = COD_CD) AS CNT
-			FROM CODDTL
-			WHERE COD_ID = 'AREA_CD'		
-			AND USE_YN = 'Y'
-			AND IFNULL(COD_VAL1, '') = ''
-		</if>
-		
-		<if test="codVal1 != ''">
-			SELECT COD_CD
-				 , COD_NM
-				 , (SELECT COUNT(*) FROM POSTMST WHERE INSTR(POST_AREA2, COD_CD) != 0 ) AS CNT
-			FROM CODDTL
-			WHERE COD_ID = 'AREA_CD'
-			AND USE_YN = 'Y'
-			AND COD_VAL1 = #{codVal1}
-		</if>
+		<choose>
+			<!-- 지역 중분류일 경우 -->
+			<when test="codVal1 != null AND !codVal1 eq ''.toString()">
+				SELECT COD_CD
+					 , COD_NM
+					 , (SELECT COUNT(*) FROM POSTMST WHERE INSTR(POST_AREA2, COD_CD) != 0 ) AS CNT
+				FROM CODDTL
+				WHERE COD_ID = 'AREA_CD'
+				AND USE_YN = 'Y'
+				AND COD_VAL1 = #{codVal1}
+			</when>
+			<!-- 지역 대분류일 경우 -->
+			<otherwise> 
+				SELECT COD_CD
+					 , COD_NM
+					 , (SELECT COUNT(*) FROM POSTMST WHERE POST_AREA1 = COD_CD) AS CNT
+				FROM CODDTL
+				WHERE COD_ID = 'AREA_CD'		
+				AND USE_YN = 'Y'
+				AND COD_VAL1 IS NULL
+			</otherwise>
+		</choose>
 	</select>
 	
 	<select id="getAreaNm" parameterType="String" resultType="String">

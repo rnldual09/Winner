@@ -34,9 +34,7 @@ public class PostServiceImpl implements PostService {
 		for(Map<String,Object> postMap : selPostList) {
 			int postSeq = Integer.parseInt(postMap.get("postSeq").toString());
 			List<?> selPostImgList = postMapper.selPostImgList(postSeq);
-			int goodCnt = postMapper.postGoodCnt(postSeq);
 			postMap.put("imglist", selPostImgList);
-			postMap.put("goodcnt", goodCnt);
 			retPostList.add(postMap);
 		}
 		

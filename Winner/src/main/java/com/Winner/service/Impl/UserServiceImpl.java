@@ -20,5 +20,10 @@ public class UserServiceImpl implements UserService {
 		return userMapper.getUserList(commandMap);
 	}
 	
+	@Override
+	public List<Map<String, Object>> getMateList(Map<String, Object> commandMap) throws Exception {
+		return userMapper.getMateList(commandMap);
+	}
+	
 	
 }

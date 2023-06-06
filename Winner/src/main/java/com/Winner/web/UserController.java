@@ -59,4 +59,19 @@ public class UserController {
 		return userList;
 	}
 	
+	/** 
+	 * @Date 2023.06.06
+	 * @author 박윤진
+	 * @deprecated 친구 리스트
+	 * @Param Map<String,Object> commandMap
+	 * @throws Exception, SQLException, IOException
+	 * */
+	@PostMapping(value = "/user/getMateList.do")
+	@ResponseBody
+	public List<Map<String,Object>> getMateList(@RequestBody Map<String,Object> commandMap) throws Exception, SQLException, IOException {
+		
+		List<Map<String,Object>> mateList = userService.getMateList(commandMap);		
+		return mateList;
+	}
+	
 }

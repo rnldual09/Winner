@@ -11,4 +11,7 @@ public interface UserMapper {
 	// 유저찾기
 	List<Map<String, Object>> getUserList(Map<String, Object> commandMap);
 	
+	// 친구리스트 가져오기
+	List<Map<String, Object>> getMateList(Map<String, Object> commandMap);
+	
 }

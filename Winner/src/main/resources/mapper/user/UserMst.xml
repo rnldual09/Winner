@@ -8,10 +8,23 @@
 			 , USR_NM
 			 , PROFILE 
 		FROM USRMST
-		WHERE 1=1
-		AND (USR_ID LIKE '${userInfo}%' OR USR_NM LIKE '${userInfo}%')
-		ORDER BY USR_ID
-		LIMIT ${limit}, 3;
+		WHERE USR_ID LIKE CONCAT(#{userInfo},'%') OR USR_NM LIKE CONCAT('%',#{userInfo},'%')
+		ORDER BY USR_NM
+		LIMIT ${limit}, 3
+	</select>
+	
+	<select id="getMateList" resultType="CustomMap" parameterType="Map">
+		SELECT M.MATE_ID, U.USR_NM MATE_NM
+		FROM MATELIST M
+			LEFT OUTER JOIN USRMST U
+				ON M.MATE_ID = U.USR_ID
+		WHERE M.USR_ID = #{usrId}
+			AND M.ACCEPT_YN = 'Y'
+			AND M.DEL_YN = 'N'
+			<if test="mateId != null and !mateId eq ''.toString()">
+				AND (M.MATE_ID LIKE CONCAT(#{mateId},'%') OR U.USR_NM LIKE CONCAT('%',#{mateId},'%')
+			</if>
+		ORDER BY U.USR_NM
 	</select>
 	
 </mapper>
