@@ -32,11 +32,17 @@
 		AND PM.OPEN_YN = 'Y'
 		AND PM.POST_AREA1 = #{postArea1}		
 		<foreach collection="postArea2" item="item" open="AND (" close=")" separator="or">
-			PM.POST_AREA2 LIKE '%${item}%'
+			PM.POST_AREA2 LIKE CONCAT('%',#{item},'%')
 		</foreach>		
-		AND PM.PER_YN = #{perYn}
-		AND PM.TEAM_YN = #{teamYn}
-		AND DATE_FORMAT(PM.END_DT,'%Y%m%d') <![CDATA[<]]> DATE_FORMAT(SYSDATE(),'%Y%m%d')
+		
+		
+		AND DATE_FORMAT(PM.END_DT,'%Y%m%d') <![CDATA[>=]]> DATE_FORMAT(SYSDATE(),'%Y%m%d')
+		<if test="perYn eq 'Y'.toString() and teamYn eq 'N'.toString()">
+			AND PM.PER_YN = #{perYn}
+		</if>
+		<if test="teamYn eq 'Y'.toString() and perYn eq 'N'.toString()">
+			AND PM.TEAM_YN = #{teamYn}
+		</if>
 		<if test="usrId != null and !usrId eq ''.toString()">
 			AND PM.USR_ID = #{usrId}
 		</if>

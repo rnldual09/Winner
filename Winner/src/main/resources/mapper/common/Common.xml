@@ -17,7 +17,7 @@
 	<select id="getAreaList" resultType="CustomMap">
 		<choose>
 			<!-- 지역 중분류일 경우 -->
-			<when test="codVal1 != null AND !codVal1 eq ''.toString()">
+			<when test='codVal1 != null and !codVal1.equals("")'>
 				SELECT COD_CD
 					 , COD_NM
 					 , (SELECT COUNT(*) FROM POSTMST WHERE INSTR(POST_AREA2, COD_CD) != 0 ) AS CNT
