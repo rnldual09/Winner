@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.Winner.mapper.UserMapper">
+	
+	<select id="getUserList" resultType="CustomMap" parameterType="Map">
+		SELECT USR_ID
+			 , USR_NM
+			 , PROFILE 
+		FROM USRMST
+		WHERE 1=1
+		AND (USR_ID LIKE '${userInfo}%' OR USR_NM LIKE '${userInfo}%')
+		ORDER BY USR_ID
+		LIMIT ${limit}, 3;
+	</select>
+	
+</mapper>
