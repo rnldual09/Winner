@@ -26,6 +26,9 @@ public class PostServiceImpl implements PostService {
 	public List<Map<String,Object>> selPostList(Map<String,Object> map) {
 		List<Map<String,Object>> retPostList = new ArrayList<>(); //반환할 리스트 객체
 		
+		String[] postArea2Arr = ((String) map.get("postArea2")).split("/");
+		map.put("postArea2", postArea2Arr);		
+		
 		List<Map<String,Object>> selPostList = postMapper.selPostList(map);
 		
 		for(Map<String,Object> postMap : selPostList) {
@@ -61,6 +64,7 @@ public class PostServiceImpl implements PostService {
 		return postMapper.getPostSeq();
 	}
 	
+	// @Transactional(rollbackFor = Exception.class, timeout=15)
 	@Override
 	public void insertPostMst(Map<String, Object> commandMap) throws Exception {		
 		postMapper.insertPostMst(commandMap);

@@ -38,6 +38,10 @@ public class LoginVO implements Serializable{
 	private String usrArea1;
 	/** 위치2 */
 	private String usrArea2;
+	/** 위치명1 */
+	private String usrAreaNm1;
+	/** 위치명2 */
+	private String usrAreaNm2;
 	/** 프로필 */
 	private String profile;
 	/** 마지막 비번 변경일 */
@@ -126,7 +130,22 @@ public class LoginVO implements Serializable{
 	public void setUsrArea2(String usrArea2) {
 		this.usrArea2 = usrArea2;
 	}
+	public String getUsrAreaNm2() {
+		return usrAreaNm2;
+	}
 
+	public void setUsrAreaNm2(String usrAreaNm2) {
+		this.usrAreaNm2 = usrAreaNm2;
+	}
+
+	public String getUsrAreaNm1() {
+		return usrAreaNm1;
+	}
+
+	public void setUsrAreaNm1(String usrAreaNm1) {
+		this.usrAreaNm1 = usrAreaNm1;
+	}
+	
 	public String getProfile() {
 		return profile;
 	}

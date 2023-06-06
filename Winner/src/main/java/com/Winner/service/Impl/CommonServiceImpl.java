@@ -23,4 +23,22 @@ public class CommonServiceImpl implements CommonService {
 		return commonMapper.getCodeList(commandMap);
 	}
 	
+	@Override
+	public List<Map<String, Object>> getAreaList(Map<String, Object> commandMap) throws Exception {		
+		return commonMapper.getAreaList(commandMap);
+	}
+
+	@Override
+	public String getAreaNm(String usrArea) throws Exception {
+
+		String usrNm = "";
+		String[] usrAreaArr = usrArea.split("/");
+		
+		for(int i=0; i<usrAreaArr.length; i++) {
+			usrNm = usrNm + commonMapper.getAreaNm(usrAreaArr[i]) + "/";
+		}
+
+		return usrNm.substring(0, usrNm.length()-1);
+	}
+	
 }

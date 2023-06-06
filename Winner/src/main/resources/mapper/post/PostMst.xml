@@ -4,15 +4,51 @@
 <mapper namespace="com.Winner.mapper.PostMapper">
 	
 	<select id="selPostList" resultType="CustomMap" parameterType="Map">
-		SELECT POST_SEQ, PM.USR_ID, OPEN_YN, POST_TIT, POST_CONT, POST_AREA1, POST_AREA2
-			 , HASH_TAG, PER_YN, TEAM_YN, TEAM_MIN_CNT, TEAM_MAX_CNT
-			 , DATE_FORMAT(STR_TO_DATE(END_DT,'%Y%m%d'),'%Y.%m.%d') END_DT, END_YN
-			 , (SELECT CASE COUNT(*) WHEN 0 THEN 'N' ELSE 'Y' END FROM POSTGOOD s WHERE s.USR_ID = #{sessionId}) GOOD_YN
-			 , UM.PROFILE	 
-		FROM POSTMST PM
-		LEFT OUTER JOIN USRMST UM
-		ON PM.USR_ID = UM.USR_ID
+		SELECT PM.POST_SEQ
+			 , PM.USR_ID
+			 , PM.OPEN_YN
+			 , PM.POST_TIT
+			 , PM.POST_CONT
+			 , PM.POST_AREA1
+			 , PM.POST_AREA2
+			 , PM.HASH_TAG
+			 , PM.PER_YN
+			 , PM.TEAM_YN
+			 , PM.TEAM_MIN_CNT
+			 , PM.TEAM_MAX_CNT
+			 , PM.END_DT
+			 , PM.END_YN
+			 , (SELECT COUNT(*) FROM POSTGOOD PG WHERE PG.POST_SEQ = PM.POST_SEQ) AS GOOD_CNT
+			 , (SELECT CASE WHEN COUNT(*) > 0 THEN 'Y' ELSE 'N' END FROM POSTGOOD PG WHERE PG.USR_ID  = #{sessionId} AND PG.POST_SEQ = PM.POST_SEQ) AS GOOD_YN
+			 , UM.PROFILE
+		FROM USRMST UM
+		RIGHT OUTER JOIN POSTMST PM
+		ON UM.USR_ID = PM.USR_ID		
+		<if test="onlyMate != null and onlyMate == Y">
+			INNER JOIN MATELIST ML
+			ON PM.USR_ID = ML.MATE_ID
+			AND ML.USR_ID = #{sessionId}
+		</if>
 		WHERE PM.END_YN = 'N'
+		AND PM.OPEN_YN = 'Y'
+		AND PM.POST_AREA1 = #{postArea1}		
+		<foreach collection="postArea2" item="item" open="AND (" close=")" separator="or">
+			PM.POST_AREA2 LIKE '%${item}%'
+		</foreach>		
+		AND PM.PER_YN = #{perYn}
+		AND PM.TEAM_YN = #{teamYn}		
+		<if test="usrId != null and usrId != ''">
+			AND PM.USR_ID = #{usrId}
+		</if>
+		<if test="teamMinCnt != null and teamMinCnt != ''">
+			AND PM.TEAM_MIN_CNT = #{teamMinCnt}
+		</if>
+		<if test="teamMaxCnt != null and teamMaxCnt != ''">
+			AND PM.TEAM_MAX_CNT = #{teamMaxCnt}
+		</if>
+		<if test="endDt != null and endDt != ''">
+			AND PM.END_DT = #{endDt}
+		</if>
 	</select>
 	
 	<select id="selPostImgList" resultType="CustomMap" parameterType="int">

@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.Winner.LoginVO;
+import com.Winner.service.CommonService;
 import com.Winner.service.LoginService;
 import com.Winner.utils.CheckParamUtil;
 import com.Winner.utils.Sha256Util;
@@ -41,6 +42,9 @@ public class LoginController {
 	
 	@Autowired
 	private LoginService loginService;
+	
+	@Autowired
+	private CommonService commonService;
 	
 	/** 
 	 * 2022.11.19 박윤진
@@ -97,8 +101,14 @@ public class LoginController {
 		        logger.info("> getRemoteAddr : "+ip);
 		    }
 		    
+		    String usrAreaNm1 = commonService.getAreaNm(resultVO.getUsrArea1());
+			String usrAreaNm2 = commonService.getAreaNm(resultVO.getUsrArea2());
+			
+			resultVO.setUsrAreaNm1(usrAreaNm1);
+			resultVO.setUsrAreaNm2(usrAreaNm2);
+		    
 		    resultVO.setIp(ip);
-		
+		    
 		    map.put("status", "success");		
 			map.put("usrInfo", resultVO);
 			map.put("token", token);

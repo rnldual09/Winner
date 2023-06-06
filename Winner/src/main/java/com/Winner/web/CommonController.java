@@ -88,4 +88,17 @@ public class CommonController {
 		return getCodeList;
 	}
 	
+	/** 
+	 * @Date 2023.05.17
+	 * @author 금길영
+	 * @deprecated 지역리스트 가져오기
+	 * @Param Map<String,Object> commandMap
+	 * @throws Exception, SQLException, IOException
+	 * */
+	@PostMapping(value = "/common/getAreaList.do")
+	@ResponseBody
+	public List<Map<String,Object>> getAreaList(@RequestBody Map<String,Object> commandMap) throws Exception, SQLException, IOException {
+		List<Map<String,Object>> getAreaList = commonService.getAreaList(commandMap);
+		return getAreaList;
+	}
 }

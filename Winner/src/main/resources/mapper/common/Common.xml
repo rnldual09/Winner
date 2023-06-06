@@ -23,5 +23,36 @@
 			AND COD_CD = #{codCd};
 		</if>
 	</select>
+	
+	<select id="getAreaList" resultType="CustomMap">
+		
+		<if test="codVal1 == ''">
+			SELECT COD_CD
+				 , COD_NM
+				 , (SELECT COUNT(*) FROM POSTMST WHERE POST_AREA1 = COD_CD) AS CNT
+			FROM CODDTL
+			WHERE COD_ID = 'AREA_CD'		
+			AND USE_YN = 'Y'
+			AND IFNULL(COD_VAL1, '') = ''
+		</if>
+		
+		<if test="codVal1 != ''">
+			SELECT COD_CD
+				 , COD_NM
+				 , (SELECT COUNT(*) FROM POSTMST WHERE INSTR(POST_AREA2, COD_CD) != 0 ) AS CNT
+			FROM CODDTL
+			WHERE COD_ID = 'AREA_CD'
+			AND USE_YN = 'Y'
+			AND COD_VAL1 = #{codVal1}
+		</if>
+	</select>
+	
+	<select id="getAreaNm" parameterType="String" resultType="String">
+		SELECT COD_NM
+		FROM CODDTL
+		WHERE COD_ID = 'AREA_CD'		
+		AND USE_YN = 'Y'
+		AND COD_CD = #{codCd}		
+	</select>
 		
 </mapper>
