@@ -9,7 +9,7 @@
 		WHERE USE_YN = 'Y'
 		AND COD_ID = #{codId}
 		AND IFNULL(COD_VAL1, '') = #{codVal1}
-		<if test="codCd != null and !codCd eq ''.toString()">
+		<if test="codCd != null and !codCd.equals('')">
 			AND COD_CD = #{codCd}
 		</if>
 	</select>

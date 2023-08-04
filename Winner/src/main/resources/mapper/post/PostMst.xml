@@ -43,13 +43,13 @@
 		<if test="teamYn eq 'Y'.toString() and perYn eq 'N'.toString()">
 			AND PM.TEAM_YN = #{teamYn}
 		</if>
-		<if test="usrId != null and !usrId eq ''.toString()">
+		<if test="usrId != null and !usrId.equals('')">
 			AND PM.USR_ID = #{usrId}
 		</if>
-		<if test="teamMinCnt != null and !teamMinCnt eq ''.toString()">
+		<if test="teamMinCnt != null and !teamMinCnt.equals('')">
 			AND PM.TEAM_MIN_CNT = #{teamMinCnt}
 		</if>
-		<if test="teamMaxCnt != null and !teamMaxCnt eq ''.toString()">
+		<if test="teamMaxCnt != null and !teamMaxCnt.equals('')">
 			AND PM.TEAM_MAX_CNT = #{teamMaxCnt}
 		</if>
 	</select>

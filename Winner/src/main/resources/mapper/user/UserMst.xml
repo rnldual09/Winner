@@ -21,8 +21,8 @@
 		WHERE M.USR_ID = #{usrId}
 			AND M.ACCEPT_YN = 'Y'
 			AND M.DEL_YN = 'N'
-			<if test="mateId != null and !mateId eq ''.toString()">
-				AND (M.MATE_ID LIKE CONCAT(#{mateId},'%') OR U.USR_NM LIKE CONCAT('%',#{mateId},'%')
+			<if test="mateId != null and !mateId.equals('')">
+				AND (M.MATE_ID LIKE CONCAT(#{mateId},'%') OR U.USR_NM LIKE CONCAT('%',#{mateId},'%'))
 			</if>
 		ORDER BY U.USR_NM
 	</select>
