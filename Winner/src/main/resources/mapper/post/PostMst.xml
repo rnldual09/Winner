@@ -186,5 +186,81 @@
 		WHERE POST_SEQ = #{postSeq}
 	</delete>
 	
+	<select id="getCommentList" resultType="CustomMap" parameterType="Map">
+		SELECT CM.POST_SEQ
+			 , CM.CMNT_SEQ
+			 , CM.USR_ID
+			 , CM.CMNT_CONT
+			 , DATE_FORMAT(CM.INS_DT, '%Y%m%d') AS INS_DT
+			 , UM.USR_NM 
+			 , UM.PROFILE 
+		FROM CMNTMST CM
+		INNER JOIN USRMST UM
+			ON CM.USR_ID = UM.USR_ID
+		WHERE CM.POST_SEQ = #{postSeq}
+		AND UM.DEL_YN = 'N'
+		ORDER BY CM.CMNT_SEQ ASC
+	</select>
 	
+	<select id="getCommentDetailList" resultType="CustomMap" parameterType="Map">
+		SELECT CD.POST_SEQ
+			 , CD.CMNT_SEQ
+			 , CD.DTL_SEQ 
+			 , CD.USR_ID
+			 , CD.CMNT_CONT
+			 , DATE_FORMAT(CD.INS_DT, '%Y%m%d') AS INS_DT
+			 , UM.USR_NM 
+			 , UM.PROFILE
+		FROM CMNTDTL CD
+		INNER JOIN USRMST UM
+			ON CD.USR_ID = UM.USR_ID
+		WHERE CD.POST_SEQ = #{postSeq}
+		AND CD.CMNT_SEQ = #{cmntSeq}
+		AND UM.DEL_YN = 'N'
+		ORDER BY CD.CMNT_SEQ, CD.DTL_SEQ ASC
+	</select>
+	
+	<insert id="insertComment" parameterType="Map">
+		<selectKey order="BEFORE" keyProperty="cmntSeq" resultType="int">
+			SELECT IFNULL(MAX(CMNT_SEQ) + 1, 1) FROM CMNTMST
+		</selectKey>
+		
+		INSERT INTO CMNTMST (
+			POST_SEQ,
+			CMNT_SEQ,
+			USR_ID,
+			CMNT_CONT,
+			OPEN_YN,
+			INS_DT
+		) VALUES (
+			#{postSeq},
+			#{cmntSeq},
+			#{usrId},
+			#{cmntCont},
+			'Y',
+			SYSDATE()		
+		)
+	</insert>
+	
+	<insert id="insertDetailComment" parameterType="Map">
+		<selectKey order="BEFORE" keyProperty="dtlSeq" resultType="int">
+			SELECT IFNULL(MAX(DTL_SEQ) + 1, 1) FROM CMNTDTL
+		</selectKey>
+		
+		INSERT INTO CMNTDTL (
+			POST_SEQ,
+			CMNT_SEQ,
+			DTL_SEQ,
+			USR_ID,
+			CMNT_CONT,
+			INS_DT
+		) VALUES (
+			#{postSeq},
+			#{cmntSeq},
+			#{dtlSeq},
+			#{usrId},
+			#{cmntCont},
+			SYSDATE()		
+		)
+	</insert>
 </mapper>

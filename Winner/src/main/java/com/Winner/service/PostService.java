@@ -22,4 +22,8 @@ public interface PostService {
 
 	public void updatePostMst(Map<String, Object> commandMap) throws Exception;
 
+	public List<Map<String,Object>> getCommentList(Map<String,Object> commandMap) throws Exception;
+
+	public int insertComment(Map<String, Object> commandMap) throws Exception;
+
 }

@@ -142,4 +142,50 @@ public class PostServiceImpl implements PostService {
 		postMapper.deletePostImg(commandMap);
 	}
 
+	@Override
+	public List<Map<String,Object>> getCommentList(Map<String,Object> commandMap) {
+		
+		List<Map<String,Object>> resultList = new ArrayList<>();
+		List<Map<String,Object>> commentList = postMapper.getCommentList(commandMap);
+		
+		if(commentList != null) {
+			
+			for(int i=0; i<commentList.size(); i++) {
+				
+				int cmntSeq = (int) commentList.get(i).get("cmntSeq");
+				commandMap.put("cmntSeq", cmntSeq);
+				
+				List<Map<String,Object>> commentDetailList = postMapper.getCommentDetailList(commandMap);
+				
+				Map<String,Object> resultMap = new HashMap<>();
+				resultMap.put("commentList", commentList.get(i));
+				resultMap.put("commentDetailList", commentDetailList);
+				
+				resultList.add(resultMap);
+			}
+		}
+		
+		return resultList;
+	}
+
+	@Override
+	public int insertComment(Map<String, Object> commandMap) throws Exception {
+		
+		int result = 0;
+		
+		/*
+		 *  cmntSeq : 댓글번호
+		 *  댓글번호가 있을시에는 답글 / 없을시에는 댓글 
+		 */
+		String cmntSeq = String.valueOf(commandMap.get("cmntSeq"));
+		
+		if(cmntSeq != null && !"".equals(cmntSeq)) {
+			result = postMapper.insertDetailComment(commandMap);
+		} else {
+			result = postMapper.insertComment(commandMap);
+		}
+		
+		return result;
+	}
+
 }

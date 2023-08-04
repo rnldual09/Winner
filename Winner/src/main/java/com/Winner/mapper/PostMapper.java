@@ -46,5 +46,15 @@ public interface PostMapper {
 	// 게시글 사진삭제
 	void deletePostImg(Map<String, Object> commandMap);
 
-	
+	// 게시글 댓글가져오기
+	List<Map<String,Object>> getCommentList(Map<String,Object> commandMap);
+
+	// 게시글 상세댓글가져오기
+	List<Map<String,Object>> getCommentDetailList(Map<String,Object> commandMap);
+
+	// 댓글입력
+	int insertComment(Map<String, Object> commandMap);
+
+	// 답글입력
+	int insertDetailComment(Map<String, Object> commandMap);
 }

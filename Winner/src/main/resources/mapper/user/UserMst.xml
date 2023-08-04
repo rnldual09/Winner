@@ -4,13 +4,32 @@
 <mapper namespace="com.Winner.mapper.UserMapper">
 	
 	<select id="getUserList" resultType="CustomMap" parameterType="Map">
-		SELECT USR_ID
-			 , USR_NM
-			 , PROFILE 
-		FROM USRMST
-		WHERE USR_ID LIKE CONCAT(#{userInfo},'%') OR USR_NM LIKE CONCAT('%',#{userInfo},'%')
-		ORDER BY USR_NM
-		LIMIT ${limit}, 3
+		SELECT T.USR_ID
+			 , T.USR_NM
+			 , T.PROFILE
+			 , CASE WHEN T.INSERT_YN = 'Y' AND T.ACCEPT_YN = 'Y' THEN 'Y'
+			   		WHEN T.INSERT_YN = 'Y' AND T.ACCEPT_YN = 'N' THEN 'N'
+			   		ELSE 'N' END AS MATE_YN
+			 , T.DEL_YN  
+			 , T.INS_DT
+		FROM
+		(
+			SELECT UM.USR_ID
+				 , UM.USR_NM 
+				 , UM.PROFIlE
+				 , CASE WHEN IFNULL(ML.USR_ID, '') = '' THEN 'N'
+				   		ELSE 'Y' END AS INSERT_YN		 
+				 , ML.ACCEPT_YN 
+				 , IFNULL(ML.DEL_YN, 'N') AS DEL_YN
+				 , CASE WHEN IFNULL(ML.INS_DT, '') != '' THEN DATE_FORMAT(ML.INS_DT, '%Y%m%d')
+	   			   		ELSE '' END AS INS_DT
+			FROM USRMST UM
+			LEFT OUTER JOIN MATELIST ML
+				ON UM.USR_ID = ML.MATE_ID
+				AND ML.USR_ID = #{sessionId}
+			WHERE UM.DEL_YN = 'N'
+			AND (UM.USR_ID LIKE CONCAT(#{searchText},'%') OR UM.USR_NM LIKE CONCAT(#{searchText},'%'))
+		) T
 	</select>
 	
 	<select id="getMateList" resultType="CustomMap" parameterType="Map">
@@ -26,5 +45,69 @@
 			</if>
 		ORDER BY U.USR_NM
 	</select>
+	
+	<select id="checkRequestCnt" resultType="int" parameterType="Map">
+		SELECT COUNT(*) AS CNT
+		FROM MATELIST
+		WHERE USR_ID = #{usrId}
+		AND MATE_ID = #{mateId}
+	</select>
+	
+	<update id="updateAcceptYn" parameterType="Map">
+		UPDATE MATELIST SET ACCEPT_YN = 'Y'
+		WHERE USR_ID = #{usrId}
+		AND MATE_ID = #{mateId}
+	</update>
+	
+	<insert id="insertMate" parameterType="Map">
+		INSERT INTO MATELIST (
+			USR_ID,
+			MATE_ID,
+			ACCEPT_YN,
+			INS_DT 
+		) VALUES (
+			#{usrId},
+			#{mateId},
+			#{acceptYn},
+			SYSDATE()
+		)
+	</insert>
+	
+	<select id="getReceiveMateRequestList" resultType="CustomMap" parameterType="Map">
+		SELECT UM.USR_ID
+			 , UM.USR_NM
+			 , UM.PROFILE
+		FROM USRMST UM
+			INNER JOIN MATELIST ML
+			ON UM.USR_ID = ML.USR_ID
+		WHERE ML.MATE_ID = #{mateId}
+		AND ML.ACCEPT_YN = 'N'
+		AND ML.DEL_YN  = 'N'
+	</select>
+	
+	<select id="selectMateList" resultType="CustomMap" parameterType="Map">
+		SELECT UM.USR_ID
+		  	 , UM.USR_NM
+		  	 , UM.PROFILE
+		  	 , ML.DEL_YN
+		  	 , DATE_FORMAT(ML.INS_DT, '%Y.%m.%d') AS INS_DT
+		FROM USRMST UM
+			INNER JOIN MATELIST ML
+			ON UM.USR_ID = ML.MATE_ID
+		WHERE ML.USR_ID = #{usrId}
+		AND ML.ACCEPT_YN = #{acceptYn}
+	</select>
+	
+	<update id="updateDelYn" parameterType="Map">
+		UPDATE MATELIST SET DEL_YN = #{delYn}
+		WHERE USR_ID = #{usrId}
+		AND MATE_ID = #{mateId}
+	</update>
+	
+	<delete id="deleteMate" parameterType="Map">
+		DELETE FROM MATELIST
+		WHERE USR_ID = #{usrId}
+		AND MATE_ID = #{mateId}
+	</delete>
 	
 </mapper>

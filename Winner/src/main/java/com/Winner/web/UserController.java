@@ -51,7 +51,7 @@ public class UserController {
 	 * @Param Map<String,Object> commandMap
 	 * @throws Exception, SQLException, IOException
 	 * */
-	@PostMapping(value = "/user/searchUserInfo.do")
+	@PostMapping(value = "/user/getUserList.do")
 	@ResponseBody
 	public List<Map<String,Object>> userList(@RequestBody Map<String,Object> commandMap) throws Exception, SQLException, IOException {
 		
@@ -74,4 +74,125 @@ public class UserController {
 		return mateList;
 	}
 	
+	/** 
+	 * @Date 2023.06.11
+	 * @author 금길영
+	 * @deprecated 친구테이블 데이터 인서트(요청, 수락)
+	 * @Param Map<String,Object> commandMap
+	 * @throws Exception, SQLException, IOException
+	 * */
+	@PostMapping(value = "/user/insertMate.do")
+	@ResponseBody
+	public Map<String,Object> sendMateRequest(@RequestBody Map<String,Object> commandMap) throws Exception, SQLException, IOException {
+		
+		Map<String, Object> resultMap = new HashMap<>();
+		
+		int result = userService.insertMate(commandMap);		
+		resultMap.put("result", result);
+		
+		return resultMap;
+	}
+	
+	/** 
+	 * @Date 2023.06.11
+	 * @author 금길영
+	 * @deprecated 받은 친구요청리스트조회 
+	 * @Param Map<String,Object> commandMap
+	 * @throws Exception, SQLException, IOException
+	 * */
+	@PostMapping(value = "/user/receiveMateRequestList.do")
+	@ResponseBody
+	public List<Map<String,Object>> receiveMateRequestList(@RequestBody Map<String,Object> commandMap) throws Exception, SQLException, IOException {
+		
+		List<Map<String,Object>> receiveMateRequestList = userService.getReceiveMateRequestList(commandMap);		
+		return receiveMateRequestList;
+	}
+	
+	/** 
+	 * @Date 2023.06.11
+	 * @author 금길영
+	 * @deprecated 보낸 친구요청리스트조회 
+	 * @Param Map<String,Object> commandMap
+	 * @throws Exception, SQLException, IOException
+	 * */
+	@PostMapping(value = "/user/sendMateRequestList.do")
+	@ResponseBody
+	public List<Map<String,Object>> sendMateRequestList(@RequestBody Map<String,Object> commandMap) throws Exception, SQLException, IOException {
+		
+		List<Map<String,Object>> sendMateRequestList = userService.selectSendMateRequestList(commandMap);		
+		return sendMateRequestList;
+	}
+
+	/** 
+	 * @Date 2023.06.11
+	 * @author 금길영
+	 * @deprecated 친구요청삭제여부 업데이트 
+	 * @Param Map<String,Object> commandMap
+	 * @throws Exception, SQLException, IOException
+	 * */
+	@PostMapping(value = "/user/updateDelYn.do")
+	@ResponseBody
+	public Map<String,Object> updateDelYn(@RequestBody Map<String,Object> commandMap) throws Exception, SQLException, IOException {
+		
+		Map<String,Object> resultMap = new HashMap<>();
+		
+		// 친구요청삭제여부 업데이트 delYn : Y 요청삭제, N 재요청 
+		int result = userService.updateDelYn(commandMap);		
+		resultMap.put("result", result);
+		
+		return resultMap;
+	}
+	
+	/** 
+	 * @Date 2023.06.11
+	 * @author 금길영
+	 * @deprecated 보낸친구요청삭제 
+	 * @Param Map<String,Object> commandMap
+	 * @throws Exception, SQLException, IOException
+	 * */
+	@PostMapping(value = "/user/deleteMateRequest.do")
+	@ResponseBody
+	public Map<String,Object> deleteMateRequest(@RequestBody Map<String,Object> commandMap) throws Exception, SQLException, IOException {
+		
+		Map<String,Object> resultMap = new HashMap<>();
+		
+		int result = userService.deleteMateRequest(commandMap);		
+		resultMap.put("result", result);
+		
+		return resultMap;
+	}
+	
+	/** 
+	 * @Date 2023.06.11
+	 * @author 금길영
+	 * @deprecated 친구리스트
+	 * @Param Map<String,Object> commandMap
+	 * @throws Exception, SQLException, IOException
+	 * */
+	@PostMapping(value = "/user/mateList.do")
+	@ResponseBody
+	public List<Map<String,Object>> mateList(@RequestBody Map<String,Object> commandMap) throws Exception, SQLException, IOException {
+		
+		List<Map<String,Object>> mateList = userService.selectMateList(commandMap);		
+		return mateList;
+	}
+	
+	/** 
+	 * @Date 2023.06.11
+	 * @author 금길영
+	 * @deprecated 친구삭제
+	 * @Param Map<String,Object> commandMap
+	 * @throws Exception, SQLException, IOException
+	 * */
+	@PostMapping(value = "/user/deleteMate.do")
+	@ResponseBody
+	public Map<String,Object> deleteMate(@RequestBody Map<String,Object> commandMap) throws Exception, SQLException, IOException {
+		
+		Map<String,Object> resultMap = new HashMap<>();
+		
+		int result = userService.deleteMate(commandMap);
+		resultMap.put("result", result);
+		
+		return resultMap;
+	}
 }

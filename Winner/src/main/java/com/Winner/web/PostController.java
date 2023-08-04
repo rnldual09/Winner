@@ -143,4 +143,38 @@ public class PostController {
 		
 		return resultMap;
 	}
+	
+	/** 
+	 * @Date 2023.06.24
+	 * @author 금길영
+	 * @deprecated 게시글 댓글가져오기
+	 * @Param Map<String,Object> commandMap
+	 * @throws Exception, SQLException, IOException
+	 * */
+	@PostMapping(value = "/post/commentList.do")
+	@ResponseBody
+	public List<Map<String,Object>> commentList(@RequestBody Map<String,Object> commandMap) throws Exception, SQLException, IOException {
+		
+		List<Map<String,Object>> commentList = postService.getCommentList(commandMap);	
+		return commentList;
+	}
+	
+	/** 
+	 * @Date 2023.06.24
+	 * @author 금길영
+	 * @deprecated 게시글 댓글입력
+	 * @Param Map<String,Object> commandMap
+	 * @throws Exception, SQLException, IOException
+	 * */
+	@PostMapping(value = "/post/insertComment.do")
+	@ResponseBody
+	public Map<String,Object> insertComment(@RequestBody Map<String,Object> commandMap) throws Exception, SQLException, IOException {
+		
+		Map<String,Object> resultMap = new HashMap<>();
+		
+		int cnt = postService.insertComment(commandMap);	
+		resultMap.put("cnt", cnt);
+		
+		return resultMap;
+	}
 }
