@@ -57,7 +57,7 @@ public class PostServiceImpl implements PostService {
 		return postInfoMap;
 	}
 	
-	// @Transactional(rollbackFor = Exception.class, timeout=15)
+	@Transactional(rollbackFor = Exception.class, timeout=15)
 	@Override
 	public boolean insertPostMst(Map<String, Object> commandMap) throws Exception {		
 		

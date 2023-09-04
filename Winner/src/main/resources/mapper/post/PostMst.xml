@@ -81,7 +81,7 @@
 	</select>
 	
 	<select id="getPostSeq" resultType="String">
-		SELECT MAX(POST_SEQ) + 1
+		SELECT IFNULL(MAX(POST_SEQ), 0) + 1
 		FROM POSTMST
 	</select>
 	
