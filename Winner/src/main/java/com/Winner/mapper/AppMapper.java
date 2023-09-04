@@ -1,6 +1,7 @@
 package com.Winner.mapper;
 
 
+import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
@@ -19,4 +20,22 @@ public interface AppMapper {
 	
 	//팀 신청
 	int insertTeamApplication(Map<String, Object> commandMap);
+	
+	// 내 게시글 가져오기
+	List<Map<String, Object>> selMyPostList(Map<String, Object> commandMap);
+
+	// 내 게시글 전체 갯수
+	int selMyPostListCnt(Map<String, Object> commandMap);
+
+	// 신청 팀 리스트
+	List<Map<String, Object>> selApplyTeamList(Map<String, Object> commandMap);
+	
+	// 신청 팀 전체 카운트
+	int selApplyTeamCnt(Map<String, Object> commandMap);
+
+	// 확정취소 및 확정
+	boolean saveConfirmYn(Map<String, Object> commandMap);
+
+	// 신청팀 등급리스트 가져오기
+	List<Map<String, Object>> getPostGradeList(Map<String, Object> commandMap);
 }

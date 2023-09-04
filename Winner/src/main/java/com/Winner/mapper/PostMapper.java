@@ -22,7 +22,7 @@ public interface PostMapper {
 	//한 개 게시글 정보
 	Map<String,Object> getPostInfo(Map<String,Object> map);
 
-	// 개사굴 번호 채번
+	// 게시글 번호 채번
 	String getPostSeq();
 	
 	// 게시글 마스터 등록

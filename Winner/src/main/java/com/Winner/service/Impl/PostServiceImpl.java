@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.Winner.config.CustomMap;
+import com.Winner.mapper.CommonMapper;
 import com.Winner.mapper.PostMapper;
 import com.Winner.service.PostService;
 
@@ -20,7 +21,6 @@ public class PostServiceImpl implements PostService {
 	
 	@Autowired
 	private PostMapper postMapper;
-	
 	
 	@Override
 	public List<Map<String,Object>> selPostList(Map<String,Object> map) {
@@ -56,67 +56,68 @@ public class PostServiceImpl implements PostService {
 		
 		return postInfoMap;
 	}
-
-	@Override
-	public String getPostSeq() throws Exception {
-		return postMapper.getPostSeq();
-	}
 	
 	// @Transactional(rollbackFor = Exception.class, timeout=15)
 	@Override
-	public void insertPostMst(Map<String, Object> commandMap) throws Exception {		
-		postMapper.insertPostMst(commandMap);
-		insertPostImg(commandMap);
-		insertGrdMst(commandMap);
+	public boolean insertPostMst(Map<String, Object> commandMap) throws Exception {		
+		
+		boolean result = true;
+		
+		try {
+			
+			String postSeq = postMapper.getPostSeq();
+			commandMap.put("postSeq", postSeq);
+			
+			// 게시글 정보입력
+			postMapper.insertPostMst(commandMap);
+			
+			// 게시글 이미지 입력						
+			insertPostImg(commandMap);
+			
+			// 게시글 등급 및 포지션 입력
+			insertGrdMst(commandMap);
+			
+		} catch (Exception e) {
+			return false;
+		}
+		
+		return result;
 	}
-
-	@Override
+	
 	public void insertPostImg(Map<String, Object> commandMap) throws Exception {
 		
-		String postSeq = (String) commandMap.get("postSeq");
+		List<Map<String, String>> fileDataList = (List<Map<String, String>>) commandMap.get("fileData");
 		
-		// 게시글 이미지는 필수선택이 아니므로 빈 값이 넘어올 수 있음
-		String oriFile = (String) commandMap.get("oriFile");
-		String svrFile = (String) commandMap.get("svrFile");
-		
-		if(!"".equals(oriFile) && !"".equals(svrFile)) {
+		if(fileDataList.size() != 0) {
 			
-			String[] oriFileArr = oriFile.split("`");
-			String[] svrFileArr = svrFile.split("`");
-		
-			for(int i=0; i<oriFileArr.length; i++) {
+			for(int i=0; i<fileDataList.size(); i++) {
 				
 				Map<String, Object> fileMap = new HashMap<>();
 				
-				fileMap.put("oriFile", oriFileArr[i]);
-				fileMap.put("svrFile", svrFileArr[i]);
-				fileMap.put("postSeq", postSeq);
+				fileMap.put("postSeq", (String) commandMap.get("postSeq"));
 				fileMap.put("imgSeq", i+1);
+				fileMap.put("oriFile", fileDataList.get(i).get("oriFile"));
+				fileMap.put("svrFile", fileDataList.get(i).get("svrFile"));
 				
 				postMapper.insertPostImg(fileMap);
 			}
 		}
 	}
 	
-	@SuppressWarnings("unchecked")
-	@Override
 	public void insertGrdMst(Map<String, Object> commandMap) throws Exception {
 		
-		String postSeq = (String) commandMap.get("postSeq");
+		List<Map<String ,String>> grdArr = (List<Map<String, String>>) commandMap.get("grdArr");
 		
-		// {'grdNm':등급명, 'grdCnt':등급인원수} 와 같은형태로 데이터 넘어온다
-		List<Map<String ,String>> grdList = (List<Map<String, String>>) commandMap.get("grdArr");
-		
-		if(grdList.size() != 0) {
+		if(grdArr.size() != 0) {
 			
-			for(int i=0; i<grdList.size(); i++) {
+			for(int i=0; i<grdArr.size(); i++) {
 
 				Map<String, Object> grdMap = new HashMap<>();
 				
-				grdMap.put("grdNm", grdList.get(i).get("grdNm"));
-				grdMap.put("grdCnt", grdList.get(i).get("grdCnt"));
-				grdMap.put("postSeq", postSeq);
+				grdMap.put("postSeq", (String) commandMap.get("postSeq"));
 				grdMap.put("grdSeq", i+1);
+				grdMap.put("grdNm", grdArr.get(i).get("grdNm"));
+				grdMap.put("grdCnt", grdArr.get(i).get("grdCnt"));
 				
 				postMapper.insertGrdMst(grdMap);
 			}

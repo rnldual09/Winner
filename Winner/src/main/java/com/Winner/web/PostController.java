@@ -116,12 +116,9 @@ public class PostController {
 	public Map<String,Object> insPostMst(@RequestBody Map<String,Object> commandMap) throws Exception, SQLException, IOException {
 		
 		Map<String,Object> resultMap = new HashMap<>();
-						
-		// 게시글 번호 채번
-		String postSeq = postService.getPostSeq();
-		commandMap.put("postSeq", postSeq);
 		
-		postService.insertPostMst(commandMap);
+		boolean result = postService.insertPostMst(commandMap);
+		resultMap.put("result", result);
 		
 		return resultMap;
 	}
@@ -177,4 +174,5 @@ public class PostController {
 		
 		return resultMap;
 	}
+	
 }

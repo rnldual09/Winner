@@ -45,4 +45,110 @@
 		)
 	</insert>
 	
+	<select id="selMyPostList" resultType="CustomMap" parameterType="Map">
+		SELECT TB.*
+		FROM
+		(
+			SELECT @ROWNUM := @ROWNUM + 1 AS ROWNUM
+				 , POST_SEQ
+				 , OPEN_YN
+				 , POST_TIT
+				 , POST_AREA1
+				 , POST_AREA2
+				 , PER_YN
+				 , TEAM_YN
+				 , TEAM_MIN_CNT
+				 , TEAM_MAX_CNT
+				 , END_YN
+				 , DATE_FORMAT(END_DT, '%Y년 %m월 %d일') AS END_DT
+		 		 , DATE_FORMAT(INS_DT, '%Y년 %m월 %d일') AS INS_DT
+			FROM POSTMST P,
+			(SELECT @ROWNUM := 0) R
+			WHERE USR_ID = #{usrId}
+			AND END_YN = #{endYn}
+			ORDER BY INS_DT DESC
+		)TB
+		WHERE ROWNUM BETWEEN #{strRownum} AND #{endRownum}
+	</select>
+	
+	<select id="selMyPostListCnt" resultType="int" parameterType="Map">
+		SELECT COUNT(*) AS CNT
+		FROM POSTMST
+		WHERE USR_ID = #{usrId}
+		AND END_YN = #{endYn}
+	</select>
+	
+	<select id="selApplyTeamList" resultType="CustomMap" parameterType="Map">
+		SELECT TB.*
+		FROM
+		(
+			SELECT @ROWNUM := @ROWNUM + 1 AS ROWNUM
+				 , AM.POST_SEQ
+				 , AM.TEAM_SEQ
+				 , AM.TEAM_NM 
+				 , AM.CEO_ID
+				 , UM.USR_NM
+		 		 , UM.PROFILE
+		 		 , UM.USR_PH
+		 		 , UM.USR_SEX
+		 		 , (SELECT DISTINCT CNF_YN FROM APPUSR WHERE POST_SEQ =AM.POST_SEQ AND TEAM_SEQ = AM.TEAM_SEQ) AS CNF_YN
+			FROM APPTEAM AM
+			INNER JOIN USRMST UM
+				ON AM.CEO_ID = UM.USR_ID
+			, (SELECT @ROWNUM := 0) R
+			WHERE POST_SEQ = #{postSeq}
+			ORDER BY TEAM_SEQ DESC
+		)TB
+		WHERE ROWNUM BETWEEN #{strRownum} AND #{endRownum}
+		<if test='cnfYn != null and !"".equals(cnfYn)'>
+			AND TB.CNF_YN = #{cnfYn}
+		</if>		
+	</select>
+	
+	<select id="selApplyTeamCnt" resultType="int" parameterType="Map">
+		SELECT COUNT(*) AS CNT
+		FROM
+		(
+			SELECT TEAM_SEQ
+			FROM APPUSR
+			WHERE POST_SEQ = #{postSeq}
+			<if test='cnfYn != null and !"".equals(cnfYn)'>
+				AND CNF_YN = #{cnfYn}
+			</if>
+			GROUP BY TEAM_SEQ
+		) TB
+	</select>
+	
+	<update id="saveConfirmYn" parameterType="Map">
+		UPDATE APPUSR SET CNF_YN = #{cnfYn}
+		WHERE POST_SEQ = #{postSeq}
+		AND TEAM_SEQ = #{teamSeq}
+	</update>
+	
+	<select id="getPostGradeList" resultType="CustomMap" parameterType="Map">
+		SELECT AU.POST_SEQ 			 AS POST_SEQ
+			 , AU.USR_ID  			 AS USR_ID
+			 , UM.USR_NM 			 AS USR_NM
+			 , UM.PROFILE  			 AS PROFILE
+			 , UM.USR_PH			 AS USR_PH 
+			 , CASE WHEN UM.USR_SEX = 1 THEN '남'
+			   ELSE '' END 			 AS USR_SEX
+			 , AU.TEAM_SEQ 			 AS TEAM_SEQ
+			 , GM.GRD_NM 			 AS GRD_NM
+			 , GM.GRD_CNT  			 AS GRD_CNT
+			 , AM.TEAM_NM   		 AS TEAM_NM
+			 , CASE WHEN AU.USR_ID = AM.CEO_ID THEN CEO_ID
+			   ELSE '' END 			 AS CEO_ID
+		FROM APPUSR AU
+		INNER JOIN GRDMST GM
+			ON AU.POST_SEQ = GM.POST_SEQ
+			AND AU.GRD_SEQ = GM.GRD_SEQ 
+		INNER JOIN USRMST UM
+			ON AU.USR_ID = UM.USR_ID
+		LEFT OUTER JOIN APPTEAM AM
+			ON AU.POST_SEQ = AM.POST_SEQ
+			AND AU.TEAM_SEQ = AM.TEAM_SEQ
+		WHERE AU.POST_SEQ = #{postSeq}
+		AND AU.TEAM_SEQ = #{teamSeq}
+	</select>
 </mapper>
